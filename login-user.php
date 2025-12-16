@@ -31,9 +31,9 @@
 
     try {
         $pdo = Database::getInstance()->getConnection();
-        echo "✅ Connection successful!<br>";
+        echo " Connection successful!<br>";
     } catch (PDOException $e) {
-        die("❌ Connection failed: " . $e->getMessage());
+        die(" Connection failed: " . $e->getMessage());
     }
 
     // Example select
@@ -50,17 +50,26 @@
         $stmt->execute($data);
         $user = $stmt->fetch();
 
-        var_dump($user);
+        //var_dump($user);
 
         if ($user && password_verify($_POST['password'], $user['password'])) {
 
-            echo "✅ Login successful! Welcome, " . htmlspecialchars($user['name']) . ".<br>";
+            echo " Login successful! Welcome, " . htmlspecialchars($user['name']) . ".<br>";
             header('Location: ./homepage.php');
-        } else {
-            echo "❌ Invalid email or password.<br>";
-        }
+            exit;
+        } else 
+            if ($user)
+            {
+            echo " Invalid email or password.<br>";
+            }
+            else 
+            {
+            //echo " Invalid email or password.<br>";
+            header('Location: ./create-user.php');
+            exit;
+            }
     } catch (PDOException $e) {
-        echo "❌ Query failed: " . $e->getMessage();
+        echo " Query failed: " . $e->getMessage();
     }
     }
     ?>
