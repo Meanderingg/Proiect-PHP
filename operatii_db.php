@@ -1,26 +1,62 @@
 <?php
-class Database {
-    public $conn;
-    public function __construct($host,$user,$pass,$dbname){
-        $this->conn=new mysqli($host,$user,$pass,$dbname);
-        if($this->conn->connect_error) die("Connection failed: ".$this->conn->connect_error);
+
+class OperatiiDB{
+
+    //CRUD Interface catre baza de date
+    public static function read($tabel, $query) {
+        require_once 'Database.php';
+
+        $conn = Database::getInstance()->getConnection();
+
+        $sql = "SELECT * FROM $tabel $query";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetchAll();
     }
-    public function create($table,$data){
-        $fields=implode(", ",array_keys($data));
-        $values="'".implode("','",array_values($data))."'";
-        return $this->conn->query("INSERT INTO $table ($fields) VALUES ($values)");
+
+    public static function create($tabel, $valori){
+        require_once 'Database.php';
+
+        $conn = Database::getInstance()->getConnection();
+        $coloaneNeformatate = implode(",",array_keys($valori));
+        $coloane = array_keys($valori);
+        for ($i = 0; $i < count($coloane); $i++) {
+            $coloane[$i] = ":" . $coloane[$i];
+        }
+        $coloane = implode(", ", $coloane);
+
+        $sql = "INSERT INTO $tabel ($coloaneNeformatate) VALUES ($coloane)";
+        echo $sql;
+        echo var_dump($valori);
+        $stmt = $conn->prepare($sql);
+        $stmt->execute($valori);  
+
+        return $conn->lastInsertId();
     }
-    public function read($table,$where="1"){
-        $result=$this->conn->query("SELECT * FROM $table WHERE $where");
-        return $result->fetch_all(MYSQLI_ASSOC);
+
+    public static function update($tabel, $valori, $conditie){
+        require_once 'Database.php';
+
+        $conn = Database::getInstance()->getConnection();
+        $coloane = array_keys($valori);
+        for ($i = 0; $i < count($coloane); $i++) {
+            $coloane[$i] = $coloane[$i] . "=:" . $coloane[$i];
+        }
+        $coloane = implode(", ", $coloane);
+
+        $sql = "UPDATE $tabel SET $coloane WHERE $conditie";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute($valori);  
     }
-    public function update($table,$data,$where){
-        $set=[];
-        foreach($data as $k=>$v){ $set[]="$k='$v'"; }
-        return $this->conn->query("UPDATE $table SET ".implode(",",$set)." WHERE $where");
-    }
-    public function delete($table,$where){
-        return $this->conn->query("DELETE FROM $table WHERE $where");
+
+    public static function delete($tabel, $conditie){
+        require_once 'Database.php';
+
+        $conn = Database::getInstance()->getConnection();
+
+        $sql = "DELETE FROM $tabel WHERE $conditie";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
     }
 }
-?>
