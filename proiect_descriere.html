@@ -1,0 +1,88 @@
+<html><head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Descrierea proiectului</title>
+	    <link rel="stylesheet" type="text/css" href="style.css">
+
+</head>
+<body>
+    <h1>Cerințe proiect PHP</h1>
+
+<h2>Descrierea generală a proiectului</h2>
+
+<p>Revista online va fi un website pe care se publică articole. Un utilizator va avea acces la vizionarea acestor articole doar după ce își va face un cont. Articolele pot fi editate de orice editor.  </p>
+
+<p>Angajații revistei online au roluri administrative și acces la funcții pe care un utilizator de tip client nu le are (editorii pot edita articole, administratorii pot adăuga și șterge alți utilizatori).  </p>
+
+<p>Autorii articolelor pot fi plătiți pentru articolele scrise, caz în care primesc un comision per numărul de cuvinte scrise, sau le pot posta gratuit.  </p>
+
+<h2>Tipurile de utilizatori și privilegii</h2>
+
+<ol>
+<li><strong>Client</strong> - are acces la articole, putând să le citească<br></li>
+<li><strong>Editor</strong> - poate aduce modificări, publica și șterge articole<br></li>
+<li><strong>Autor</strong> - poate edita articolele pe care le-a scris<br></li>
+<li><strong>Administrator</strong> - poate adăuga și șterge utilizatori<br></li>
+</ol>
+
+<h2>Entități și tabele</h2>
+
+<h3>1. Tabela users</h3>
+
+<ul>
+<li><strong>user_id</strong> integer<em>(cheie primară)</em> - un identificator unic pentru fiecare utilizator.</li>
+<li><strong>username</strong> varchar - numele de utilizator<br></li>
+<li><strong>author_id</strong> integer <em>(cheie străină către tabela authors)</em> - id-ul de autor, dacă utilizatorul este și autorul unuia sau mai multor articole. Altfel, coloana este NULL. </li>
+<li><strong>editor_id</strong> integer <em>(cheie străină către tabela editors)</em> - id-ul de editor, dacă utilizatorul este și editor. Altfel, coloana este NULL .</li>
+<li><strong>administrator_id</strong> integer <em>(cheie străină către tabela administrators)</em> - id-ul de administrator, dacă utilizatorul este și editor. Altfel, coloana este NULL.<br></li>
+<li><strong>e_mail</strong> varchar - email-ul asociat utilizatorului<br></li>
+</ul>
+
+<h3>2. Tabela editors</h3>
+
+<ul>
+<li><strong>editor_id</strong> integer <em>(cheie primară)</em><br></li>
+<li><strong>user_id</strong> integer<em>(cheie străină care face legătura cu tabela users)</em><br></li>
+<li><strong>hire_date</strong> date - data la care a fost angajat editorul.</li>
+<li><strong>manager_id</strong> integer <em>(cheie străină către tabela administrators)</em> - managerul editorului.</li>
+<li><strong>salary</strong> integer - salariul editorului.</li>
+</ul>
+
+<h3>3. Tabela <code>authors</code></h3>
+
+<ul>
+<li><strong>author_id</strong> integer <em>(cheie primară)</em> - id-ul de autor. </li>
+<li><strong>user_id</strong> integer <em>(cheie străină care face legătura cu tabela <code>users</code>)</em><br></li>
+<li><strong>no_of_articles</strong> integer - numărul de articole ale unui autor<br></li>
+<li><strong>commission</strong> integer - plata per cuvânt pentru un articol. Poate fi NULL, caz în care autorul scrie articole pro bono. </li>
+</ul>
+
+<h3>4. Tabela administrators</h3>
+
+<ul>
+<li><strong>administrator_id</strong> integer <em>(cheie primară)</em><br></li>
+<li><strong>user_id</strong> integer <em>(cheie străină care face legătura cu tabela <code>users</code>)</em><br></li>
+<li><strong>hire_date</strong> date - data la care administratorul a fost angajat.</li>
+<li><strong>manager_id</strong> - id-ul administratorului care se ocupă de acel utilizator (face parte din tabela administrators). </li>
+<li><strong>salary</strong> int - salariul administratorului.</li>
+</ul>
+
+<h3>5. Tabela articles</h3>
+
+<ul>
+<li><strong>article_id</strong> integer <em>(cheie primară)</em><br></li>
+<li><strong>publish_date</strong> date - data publicării articolului<br></li>
+<li><strong>author_id</strong> integer <em>(cheie străină către tabela <code>authors</code>)</em> - id-ul autorului care a scris articolul.</li>
+<li><strong>editor_id</strong> integer <em>(cheie străină către tabela <code>editors</code>)</em> - id-ul editorului care a publicat articolul.</li>
+</ul>
+
+<p><img src="./PHP_magazine.png" alt="image" title="Imagine Tabele">  </p>
+
+<h2>Descrierea soluției de implementare</h2>
+
+<p>Diagrama următoare arată pașii pe care îi parcurge un utilizator.  </p>
+
+<p><img src="./UML.png" alt="image">  </p>
+
+<p>Serverul servește unui utilizator pagina de logare. Dacă acesta nu are cont, îl trimite către pagina de creare de cont. Dacă acesta are cont, se poate înregistra, moment în care serverul îl va redirecționa către pagina principală. De acolo un utilizator poate să citească diverse articole. Dacă cineva se înregistrează ca autor, el va avea acces la un buton de publicare de articol. Dacă apasă pe el, serverul îi va cere să încarce un fișier text. Editorii au acces la o pagină separată care conține o listă de articole care așteaptă review, din care pot alege un articol pentru modificare sau publicare. Administratorii au acces la o pagină separată pentru a vedea utilizatorii. Un administrator poate alege să șteargă un utilizator sau să îi modifice diverse atribute (rolul, salariul etc.).  </p>
+<footer></footer>
+</body></html>
