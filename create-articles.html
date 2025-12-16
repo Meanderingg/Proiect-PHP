@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Post an article</title>
+</head>
+<body>
+    <form action="create-articles.php" method="post">
+        <label>
+            Title:<br>
+            <input type="text" name="title" required>
+        </label>
+        <br>
+        <label>
+            Contents:<br>
+            <textarea name="contents" rows="7" cols="50" required></textarea>
+        </label>
+        <br>
+
+        <button type="submit">Send for review</button>
+    </form>
+</body>
+</html>
