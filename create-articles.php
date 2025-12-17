@@ -26,7 +26,7 @@ try {
     $stmt->execute($data);
 
     //Redirect user to /read-stiri.php?id=lastInsertId() -- de schimbat din homepage.php
-    header("Location: homepage.php?id=" . $pdo->lastInsertId());
+    header("Location: read-articles.php?id=" . $pdo->lastInsertId());
 
 } catch (PDOException $e) {
     echo " Insert failed: " . $e->getMessage();
