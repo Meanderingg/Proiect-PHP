@@ -55,8 +55,8 @@ try {
 <a href="login-user.php">Login</a> |
 <!--modify nav bar based on which user uses it-->
 </nav>
-
-</body>
+</header>
 <?php
 ?>
+</body>
 </html>

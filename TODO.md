@@ -1,7 +1,7 @@
 # TODO
 
 * Make the homepage display all the articles -DONE
-* Create a header with links to login and homepage -PARTIAL
+1. Fix nav bar in read-articles, it show it beneath the aricle
 2. Make SESSION variable store the user
 3. Create admin user, roles, make the reading page available only to logged in users
 4. Create the roles administration page for admins
