@@ -50,6 +50,14 @@ try {
 </head>
 
 <body>
+<header>
+<nav>
+<a href="homepage.php">Home</a> |
+<a href="login-user.php">Login</a> |
+<!--modify nav bar based on which user uses it-->
+</nav>
+</header>
+
     <h1>SUCCESS</h1>
     <ul>
     <?php foreach ($record as $record): ?>
