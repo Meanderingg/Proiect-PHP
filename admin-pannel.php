@@ -12,8 +12,8 @@ if(! isset($_SESSION['username'])){
     header('Location: ./login-user.php');
 }
 else
-    if(isset($_SESSION['admin'])){
-        header('Location: ./homepage-admin.php'); //modify for editor and author!
+    if(! isset($_SESSION['admin'])){
+        header('Location: ./homepage.php'); //modify for editor and author!
     }
 
 else
@@ -21,13 +21,13 @@ try {
     $pdo = Database::getInstance()->getConnection();
 
     // Fetch all the articles
-    $sql = "SELECT article_id, title FROM articles" ;
+    $sql = "SELECT * FROM users" ;
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     
     $record = $stmt->fetchALL(PDO::FETCH_ASSOC); //Return each row as an associative array, using column names as keys
     if (!$record) {
-        die("No article found ");
+        die("No users found ");
     }
     //var_dump($record);
 
@@ -72,10 +72,9 @@ try {
     <h1>SUCCESS</h1>
     <ul>
     <?php foreach ($record as $record): ?>
+    //modify to list the users
         <li>
-            <a href="read-articles.php?id=<?= htmlspecialchars($record['article_id']) ?>">
-                <?= htmlspecialchars($record['title']) ?>
-            </a>
+
         </li>
     <?php endforeach; ?>
 </ul>

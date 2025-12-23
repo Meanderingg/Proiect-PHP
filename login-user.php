@@ -1,3 +1,10 @@
+ <?php
+// Start the session
+session_destroy();
+//de fiecare data cand dai pe login se da logout, poate faci pagina diferita de logout?
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,7 +61,12 @@
 
         if ($user && password_verify($_POST['password'], $user['password'])) {
 
-            echo " Login successful! Welcome, " . htmlspecialchars($user['name']) . ".<br>";
+            //echo " Login successful! Welcome, " . htmlspecialchars($user['username']) . ".<br>";
+            $_SESSION['username'] = $user['username'];
+            if(isset($user['administrator_id'])){
+                $_SESSION['admin'] = $user['administrator_id'];
+                }
+            //echo $_SESSION['username'] ;
             header('Location: ./homepage.php');
             exit;
         } else 

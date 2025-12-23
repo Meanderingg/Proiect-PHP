@@ -10,6 +10,14 @@
 </head>
 
 <body>
+    <header>
+<nav>
+<a href="homepage.php">Home</a> |
+<a href="login-user.php">Login</a> |
+<!--modify nav bar based on which user uses it-->
+</nav>
+</header>
+
     <div class="container mt-5">
         <h1 class="mb-4">Create User</h1>
         <form action="create-user.php" method="POST">
