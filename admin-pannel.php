@@ -3,11 +3,13 @@
 
 session_start();
 
-//ini_set('display_errors', 1);
-//ini_set('display_startup_errors', 1);
-//error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 require_once './Database.php';
+include './operatii_db.php';
+
 if(! isset($_SESSION['username'])){
     header('Location: ./login-user.php');
 }
@@ -18,35 +20,11 @@ else
 
 else
 try {
-    $pdo = Database::getInstance()->getConnection();
+  // get all the users
+    $record = OperatiiDB::read('users', 'WHERE 1 = 1'); //success, asa apelezi functia
+    var_dump($record);
 
-    // Fetch all the articles
-    $sql = "SELECT * FROM users" ;
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
-    
-    $record = $stmt->fetchALL(PDO::FETCH_ASSOC); //Return each row as an associative array, using column names as keys
-    if (!$record) {
-        die("No users found ");
-    }
-    //var_dump($record);
 
-    // Declare variables to hold the fetched data
-
-    /*
-    $title = $record['title'];
-    $id = $record['article_id'];
-
-    //de facut lista cu id-urile si titlul
-    
-     */
-    /*
-    echo ("<h1> " . htmlspecialchars($title) . "</h1>
-          <h3>" . htmlspecialchars($date) . "</h3>
-          <p>" . nl2br(htmlspecialchars($contents)) . "</p>"
-        );
-     
-    */
 } catch (PDOException $e) {
     die(" Connection failed: " . $e->getMessage());
 }
@@ -70,12 +48,5 @@ try {
 </header>
 
     <h1>SUCCESS</h1>
-    <ul>
-    <?php foreach ($record as $record): ?>
-    //modify to list the users
-        <li>
-
-        </li>
-    <?php endforeach; ?>
 </ul>
 </body>
