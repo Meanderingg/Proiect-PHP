@@ -22,7 +22,7 @@ else
 try {
   // get all the users
     $record = OperatiiDB::read('users', 'WHERE 1 = 1'); //success, asa apelezi functia
-    var_dump($record);
+    //var_dump($record);
 
 
 } catch (PDOException $e) {
@@ -48,5 +48,23 @@ try {
 </header>
 
     <h1>SUCCESS</h1>
-</ul>
+    <table border='1'>
+        <thead>
+        <tr>
+            <th>User ID</th>
+            <th>Username</th>
+            <th>Author ID</th>
+            <th>Admin ID</th>
+            <th>Editor ID</th>
+            <th>email</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($record as $record): ?>
+            <tr>
+                <td><?php echo htmlspecialchars($record['user_id']) ?></td>
+            </tr>
+        <?php endforeach;?>
+        <!--merge sa fac asa un tabel cu toate info-->
 </body>
+</html>
