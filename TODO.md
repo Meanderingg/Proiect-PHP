@@ -1,5 +1,6 @@
 # TODO
 
+-- adaugat view pt editors in admin pannel, update delete si create sa aiba referinta in functie de tabel, creat celelalte tabele si impus restrictia de fk
 1. Fix nav bar in read-articles, it show it beneath the aricle
 2. Make SESSION variable store the user
 3. Redirect homepage based on editor, author, admin
