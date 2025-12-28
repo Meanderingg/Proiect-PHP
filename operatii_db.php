@@ -50,13 +50,13 @@ class OperatiiDB{
         $stmt->execute($valori);  
     }
 
-    public static function delete($tabel, $conditie){
+    public static function delete($tabel, $conditie, $param){
         require_once 'Database.php';
 
         $conn = Database::getInstance()->getConnection();
 
         $sql = "DELETE FROM $tabel WHERE $conditie";
         $stmt = $conn->prepare($sql);
-        $stmt->execute();
+        $stmt->execute($param); //trebuie sa adaugam parametrii ca sa inlocuim id-ul
     }
 }

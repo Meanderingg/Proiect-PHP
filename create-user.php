@@ -44,9 +44,9 @@
 
     try {
         $pdo = Database::getInstance()->getConnection();
-        echo "✅ Connection successful!<br>";
+        echo " Connection successful!<br>";
     } catch (PDOException $e) {
-        die("❌ Connection failed: " . $e->getMessage());
+        die(" Connection failed: " . $e->getMessage());
     }
 
     // Example insert
@@ -63,9 +63,9 @@
             'password' => password_hash($_POST['password'], PASSWORD_BCRYPT)
         ];
         $stmt->execute($data);
-        echo "✅ User created successfully!<br>";
+        echo " User created successfully!<br>";
     } catch (PDOException $e) {
-        echo "❌ Insert failed: " . $e->getMessage();
+        echo " Insert failed: " . $e->getMessage();
     }
 
     }
