@@ -22,8 +22,8 @@ else
 try {
   // get all the users
     $record = OperatiiDB::read('users', 'WHERE 1 = 1'); //success, asa apelezi functia
-    //$record_editors
-    //$record_authors
+    $record_editor = OperatiiDB::read('editors', 'WHERE 1 = 1'); 
+    $record_admin = OperatiiDB::read('administrators', 'WHERE 1 = 1'); 
     
     //var_dump($record);
 
@@ -79,6 +79,59 @@ try {
         </tbody>
         </table>
 
+    <h3>Editori</h3>
+    <table border='1'>
+        <thead>
+        <tr>
+            <th>Editor ID</th>
+            <th>Data Angajarii</th>
+            <th>Admin ID</th>
+            <th>Salariu</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($record_editor as $record_editor): ?>
+            <tr>
+                <td><?php echo htmlspecialchars($record_editor['editor_id']) ?></td>
+                <td><?php echo htmlspecialchars($record_editor['hire_date']??' ') ?></td>
+                <td><?php echo htmlspecialchars($record_editor['manager_id']??' ') ?></td> <!--??' ' daca e null il transf in ' '-->
+                <td><?php echo htmlspecialchars($record_editor['salary']??' ') ?></td>
+            </tr>
+        <?php endforeach;?>
+        <!--merge sa fac asa un tabel cu toate info-->
+        </tbody>
+        </table>
+
+    <h3>Administratori</h3>
+    <table border='1'>
+        <thead>
+        <tr>
+            <th>Administrator ID</th>
+            <th>Data Angajarii</th>
+            <th>Salariu</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($record_admin as $record_admin): ?>
+            <tr>
+                <td><?php echo htmlspecialchars($record_admin['administrator_id']) ?></td>
+                <td><?php echo htmlspecialchars($record_admin['hire_date']??' ') ?></td>
+                <td><?php echo htmlspecialchars($record_admin['salary']??' ') ?></td>
+            </tr>
+        <?php endforeach;?>
+        <!--merge sa fac asa un tabel cu toate info-->
+        </tbody>
+        </table>
+
+    <h2>Operatii utilizatori</h2>
+    <h4>Stergere</h4>
+        <form action="admin-pannel.php" method="post">
+        <input type="hidden" name="action" value="delete_user"> <!-- fac switch in php in functie de $_POST[action]-->
+        <label for="id">ID utilizator</label><br>
+        <input type="text" name="id" id="id">
+        <input type="submit" value="Submit">
+        </form>
+
     <h2>Operatii utilizatori</h2>
     <h4>Stergere</h4>
         <form action="admin-pannel.php" method="post">
@@ -92,48 +145,55 @@ try {
         <p>Blank pentru valoarea default, ID este necesar</p>
         <form action="admin-pannel.php" method="post">
         <input type="hidden" name="action" value="alter_user"> <!-- fac switch in php in functie de $_POST[action]-->
-        <label for="user_id">ID utilizator</label><br>
+        <label for="user_id">ID-ul utilizatorului</label><br>
         <input type="text" name="user_id" id="user_id"><br>
 
         <label for="email">e-mail</label><br>
         <input type="text" name="email" id="emalil"><br>
 
-        <label for="admin_id">ID Administrator</label><br>
-        <input type="text" name="admin_id" id="admin_id"><br>
-
-        <label for="editor_id">ID Editor</label><br>
-        <input type="text" name="editor_id" id="editor_id"><br>
-
-        <label for="author_id">ID Autor</label><br>
-        <input type="text" name="author_id" id="author_id"><br>
-
+        <label for="password">password</label><br>
+        <input type="text" name="password" id="password"><br>
+    
         <label for="username">Username</label><br>
         <input type="text" name="username" id="username">
 
         <input type="submit" value="Submit">
         </form>
 
-    <h4>Adaugare</h4>
+    <h4>Adaugare utilizator</h4>
         <p>Blank pentru valoarea default</p>
         <form action="admin-pannel.php" method="post">
         <input type="hidden" name="action" value="create_user"> <!-- fac switch in php in functie de $_POST[action]-->
         <label for="email">e-mail</label><br>
         <input type="text" name="email" id="email"><br>
 
-        <label for="admin_id">ID Administrator</label><br>
-        <input type="text" name="admin_id" id="admin_id"><br>
-
-        <label for="editor_id">ID Editor</label><br>
-        <input type="text" name="editor_id" id="editor_id"><br>
-
-        <label for="author_id">ID Autor</label><br>
-        <input type="text" name="author_id" id="author_id"><br>
-
         <label for="username">Username</label><br>
         <input type="text" name="username" id="username"><br>
 
         <label for="password">Password</label><br>
         <input type="text" name="password" id="password">
+
+        <input type="submit" value="Submit">
+        </form>
+   
+    <h4>Adaugare editor</h4>
+        <p>Blank pentru valoarea default</p>
+        <form action="admin-pannel.php" method="post">
+        <input type="hidden" name="action" value="create_editor"> <!-- fac switch in php in functie de $_POST[action]-->
+        <label for="email">e-mail</label><br>
+        <input type="text" name="email" id="email"><br>
+
+        <label for="username">Username</label><br>
+        <input type="text" name="username" id="username"><br>
+
+        <label for="password">parola</label><br>
+        <input type="text" name="password" id="password"><br>
+
+        <label for="salary">salariu</label><br>
+        <input type="text" name="salary" id="salary"><br>
+
+        <label for="admin_id">Id administrator</label><br>
+        <input type="text" name="admin_id" id="admin_id">
 
         <input type="submit" value="Submit">
         </form>
@@ -165,18 +225,30 @@ try {
                 'email' => $_POST['email'],
                 'password' => password_hash($_POST['password'], PASSWORD_BCRYPT)
              ];
-             if(isset($_POST['admin_id']) && $_POST['admin_id'] != ''){
-                 $param['administrator_id'] = $_POST['admin_id'];
-             }
-
-             if(isset($_POST['editor_id']) && $_POST['editor_id'] != ''){
-                 $param['editor_id'] = $_POST['editor_id'];
-             }
-
-             if(isset($_POST['author_id']) && $_POST['author_id'] != ''){
-                 $param['author_id'] = $_POST['author_id'];
-             }
             //var_dump($param);
+            OperatiiDB::create('users', $param); //creare de utilizator
+            } catch (PDOException $e) {
+                die(" Connection failed: " . $e->getMessage());
+            }
+        }
+
+        elseif($_POST['action'] == "create_editor")
+        {
+            //var_dump($_POST);
+         try {
+             $param = [
+                'username' => $_POST['username'],
+                'email' => $_POST['email'],
+                'password' => password_hash($_POST['password'], PASSWORD_BCRYPT),
+             ];
+             $editor_param = [
+                 'salary' => $_POST['salary'],
+                 'manager_id' => $_POST['admin_id']
+             ];
+             //trebuie sa fac select din tabelul adim si sa leg cheia de id
+            //var_dump($param);
+            $last_id = OperatiiDB::create('editors', $editor_param); //creare de utilizator
+            $param['editor_id'] = $last_id;
             OperatiiDB::create('users', $param); //creare de utilizator
             } catch (PDOException $e) {
                 die(" Connection failed: " . $e->getMessage());
@@ -191,10 +263,6 @@ try {
              $conditie = 'user_id = :user_id';
              $param = ['user_id' => $_POST['user_id']];
 
-             if(isset($_POST['admin_id']) && $_POST['admin_id'] != ''){
-                 $param['administrator_id'] = $_POST['admin_id'];
-             }
-
              if(isset($_POST['username']) && $_POST['username'] != ''){
                  $param['username'] = $_POST['username'];
              }
@@ -205,14 +273,6 @@ try {
 
              if(isset($_POST['password']) && $_POST['password'] != ''){
                  $param['password'] = password_hash($_POST['password'], PASSWORD_BCRYPT);
-             }
-
-             if(isset($_POST['editor_id']) && $_POST['editor_id'] != ''){
-                 $param['editor_id'] = $_POST['editor_id'];
-             }
-
-             if(isset($_POST['author_id']) && $_POST['author_id'] != ''){
-                 $param['author_id'] = $_POST['author_id'];
              }
             //var_dump($param);
             OperatiiDB::update('users', $param, $conditie); //update de utilizator
