@@ -11,20 +11,18 @@ require_once './Database.php';
 if(! isset($_SESSION['username'])){
     header('Location: ./login-user.php');
 }
-else
-{
+
+
     if(isset($_SESSION['admin'])){
         header('Location: ./homepage-admin.php'); //modify for editor and author!
     }
     if(isset($_SESSION['editor'])){
         header('Location: ./homepage-editor.php'); //modify for editor and author!
     }
-    if(isset($_SESSION['admin'])){
+    if(isset($_SESSION['author'])){
         header('Location: ./homepage-author.php'); //modify for editor and author!
     }
-}
 
-else
 try {
     $pdo = Database::getInstance()->getConnection();
 

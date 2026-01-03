@@ -1,6 +1,13 @@
  <?php
 // Start the session
+// Source - https://stackoverflow.com/a
+// Posted by MANCHUCK, modified by community. See post 'Timeline' for change history
+// Retrieved 2026-01-03, License - CC BY-SA 4.0
+
+setcookie (session_name(), "", time() - 3600);
 session_destroy();
+session_write_close();
+
 //de fiecare data cand dai pe login se da logout, poate faci pagina diferita de logout?
 session_start();
 ?>
