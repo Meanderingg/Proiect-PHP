@@ -65,6 +65,15 @@ session_start();
             $_SESSION['username'] = $user['username'];
             if(isset($user['administrator_id'])){
                 $_SESSION['admin'] = $user['administrator_id'];
+                header('Location: ./homepage-admin.php');
+                }
+            if(isset($user['editor_id'])){
+                $_SESSION['editor'] = $user['editor_id'];
+                header('Location: ./homepage-editor.php');
+                }
+            if(isset($user['author_id'])){
+                $_SESSION['author'] = $user['author_id'];
+                header('Location: ./homepage-author.php');
                 }
             //echo $_SESSION['username'] ;
             header('Location: ./homepage.php');

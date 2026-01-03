@@ -15,15 +15,24 @@ if(! isset($_SESSION['username'])){
 }
 else
     if(! isset($_SESSION['admin'])){
-        header('Location: ./homepage.php'); //modify for editor and author!
+        if(isset($_SESSION['editor'])){
+            header('Location: ./homepage-editor.php'); //modify for editor and author!
+        }
+        else
+            if(isset($_SESSION['author'])){
+                header('Location: ./homepage-author.php'); //modify for editor and author!
+            }
+        else
+            header('Location: ./homepage.php'); //modify for editor and author!
     }
-
 else
 try {
   // get all the users
-    $record = OperatiiDB::read('users', 'WHERE 1 = 1'); //success, asa apelezi functia
-    $record_editor = OperatiiDB::read('editors', 'WHERE 1 = 1'); 
-    $record_admin = OperatiiDB::read('administrators', 'WHERE 1 = 1'); 
+    $record = OperatiiDB::read('users', '*', 'WHERE 1 = 1'); //success, asa apelezi functia
+    $record_editor = OperatiiDB::read('editors','*', 'WHERE 1 = 1'); 
+    $record_admin = OperatiiDB::read('administrators','*', 'WHERE 1 = 1'); 
+    $record_author = OperatiiDB::read('authors','*', 'WHERE 1 = 1'); 
+   
     
     //var_dump($record);
 
@@ -123,6 +132,37 @@ try {
         </tbody>
         </table>
 
+    <h3>Autori</h3>
+    <table border='1'>
+        <thead>
+        <tr>
+            <th>Autor ID</th>
+            <th>Comision</th>
+            <th>Numar de articole</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($record_author as $record_author): ?>
+        <tr>
+                <td><?php echo htmlspecialchars($record_author['author_id']) ?></td>
+                <td><?php echo htmlspecialchars($record_author['commission']??' ') ?></td>
+                <td>
+                    <?php
+                        $no_articles = OperatiiDB::read(
+                        'articles',
+                        'COUNT(*) AS total',
+                        'WHERE author_id = ' . intval($record_author['author_id'])
+                        );
+
+                        echo htmlspecialchars($no_articles[0]['total'] ?? 0);
+                    ?>
+                </td>
+
+            </tr>
+        <?php endforeach;?>
+        <!--merge sa fac asa un tabel cu toate info-->
+        </tbody>
+        </table>
     <h2>Operatii utilizatori</h2>
     <h4>Stergere</h4>
         <form action="admin-pannel.php" method="post">
@@ -197,6 +237,25 @@ try {
 
         <input type="submit" value="Submit">
         </form>
+
+    <h4>Adaugare autor</h4>
+        <p>Blank pentru valoarea default</p>
+        <form action="admin-pannel.php" method="post">
+        <input type="hidden" name="action" value="create_author"> <!-- fac switch in php in functie de $_POST[action]-->
+        <label for="email">e-mail</label><br>
+        <input type="text" name="email" id="email"><br>
+
+        <label for="username">Username</label><br>
+        <input type="text" name="username" id="username"><br>
+
+        <label for="password">parola</label><br>
+        <input type="text" name="password" id="password"><br>
+
+        <label for="commission">comision</label><br>
+        <input type="text" name="commission" id="commission"><br>
+
+        <input type="submit" value="Submit">
+        </form>
 <?php
     require_once './Database.php';
     require_once './operatii_db.php';
@@ -249,6 +308,28 @@ try {
             //var_dump($param);
             $last_id = OperatiiDB::create('editors', $editor_param); //creare de utilizator
             $param['editor_id'] = $last_id;
+            OperatiiDB::create('users', $param); //creare de utilizator
+            } catch (PDOException $e) {
+                die(" Connection failed: " . $e->getMessage());
+            }
+        }
+
+        elseif($_POST['action'] == "create_author")
+        {
+            //var_dump($_POST);
+         try {
+             $param = [
+                'username' => $_POST['username'],
+                'email' => $_POST['email'],
+                'password' => password_hash($_POST['password'], PASSWORD_BCRYPT),
+             ];
+             $author_param = [
+                 'commission' => $_POST['commission']
+             ];
+             //trebuie sa fac select din tabelul adim si sa leg cheia de id
+            //var_dump($param);
+            $last_id = OperatiiDB::create('authors', $author_param); //creare de utilizator
+            $param['author_id'] = $last_id;
             OperatiiDB::create('users', $param); //creare de utilizator
             } catch (PDOException $e) {
                 die(" Connection failed: " . $e->getMessage());

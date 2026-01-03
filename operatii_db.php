@@ -3,12 +3,12 @@
 class OperatiiDB{
 
     //CRUD Interface catre baza de date
-    public static function read($tabel, $query) {
+    public static function read($tabel, $query, $option) {
         require_once 'Database.php';
 
         $conn = Database::getInstance()->getConnection();
 
-        $sql = "SELECT * FROM $tabel $query";
+        $sql = "SELECT $query FROM $tabel $option";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
 
