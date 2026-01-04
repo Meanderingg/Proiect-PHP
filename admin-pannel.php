@@ -342,8 +342,9 @@ try {
             //public static function update($tabel, $valori, $conditie){
          try {
              $conditie = 'user_id = :user_id';
-             $param = ['user_id' => $_POST['user_id']];
+             $paramCond = ['user_id' => $_POST['user_id']];
 
+             $param = [];
              if(isset($_POST['username']) && $_POST['username'] != ''){
                  $param['username'] = $_POST['username'];
              }
@@ -356,7 +357,7 @@ try {
                  $param['password'] = password_hash($_POST['password'], PASSWORD_BCRYPT);
              }
             //var_dump($param);
-            OperatiiDB::update('users', $param, $conditie); //update de utilizator
+            OperatiiDB::update('users', $param, $conditie, $paramCond); //update de utilizator
             } catch (PDOException $e) {
                 die(" Connection failed: " . $e->getMessage());
             }

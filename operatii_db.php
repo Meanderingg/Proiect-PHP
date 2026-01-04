@@ -35,7 +35,7 @@ class OperatiiDB{
         return $conn->lastInsertId();
     }
 
-    public static function update($tabel, $valori, $conditie){
+    public static function update($tabel, $valori, $conditie, $paramCond){
         require_once 'Database.php';
 
         $conn = Database::getInstance()->getConnection();
@@ -47,7 +47,7 @@ class OperatiiDB{
 
         $sql = "UPDATE $tabel SET $coloane WHERE $conditie";
         $stmt = $conn->prepare($sql);
-        $stmt->execute($valori);  
+        $stmt->execute(array_merge($valori,$paramCond));  
     }
 
     public static function delete($tabel, $conditie, $param){

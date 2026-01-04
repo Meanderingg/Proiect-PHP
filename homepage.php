@@ -75,7 +75,7 @@ try {
 </nav>
 </header>
 
-    <h1>SUCCESS</h1>
+    <h1>Articole</h1>
     <ul>
     <?php foreach ($record as $record): ?>
         <li>

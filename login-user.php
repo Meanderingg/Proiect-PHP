@@ -4,12 +4,14 @@
 // Posted by MANCHUCK, modified by community. See post 'Timeline' for change history
 // Retrieved 2026-01-03, License - CC BY-SA 4.0
 
+session_start();
+
+//$_SESSION = [];
 setcookie (session_name(), "", time() - 3600);
 session_destroy();
-session_write_close();
 
-//de fiecare data cand dai pe login se da logout, poate faci pagina diferita de logout?
 session_start();
+//de fiecare data cand dai pe login se da logout, poate faci pagina diferita de logout?
 ?>
 
 <!DOCTYPE html>
@@ -70,6 +72,7 @@ session_start();
 
             //echo " Login successful! Welcome, " . htmlspecialchars($user['username']) . ".<br>";
             $_SESSION['username'] = $user['username'];
+
             if(isset($user['administrator_id'])){
                 $_SESSION['admin'] = $user['administrator_id'];
                 header('Location: ./homepage-admin.php');
