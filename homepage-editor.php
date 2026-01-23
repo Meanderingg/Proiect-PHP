@@ -3,9 +3,9 @@
 
 session_start();
 
-//ini_set('display_errors', 1);
-//ini_set('display_startup_errors', 1);
-//error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 require_once './Database.php';
 if(! isset($_SESSION['username'])){
@@ -14,9 +14,10 @@ if(! isset($_SESSION['username'])){
 
 else
     if(! isset($_SESSION['editor'])){
-        header('Location: ./homepage.php'); //modify for editor and author!
+        header('Location: ./homepage.php'); 
     }
 else
+
 try {
     $pdo = Database::getInstance()->getConnection();
 
