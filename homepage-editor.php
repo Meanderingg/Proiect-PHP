@@ -22,7 +22,7 @@ try {
     $pdo = Database::getInstance()->getConnection();
 
     // Fetch all the articles
-    $sql = "SELECT article_id, title FROM articles" ;
+    $sql = "SELECT article_id, title, approved FROM articles" ;
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     
@@ -73,12 +73,14 @@ try {
 
     <h1>SUCCESS</h1>
     <ul>
-    <?php foreach ($record as $record): ?>
-        <li>
-            <a href="read-articles.php?id=<?= htmlspecialchars($record['article_id']) ?>">
-                <?= htmlspecialchars($record['title']) ?>
-            </a>
-        </li>
-    <?php endforeach; ?>
+        <?php foreach ($record as $record) {
+            if ((int)$record['approved'] == 1) { ?>
+                <li>
+                    <a href="read-articles.php?id=<?= htmlspecialchars($record['article_id']) ?>">
+                        <?= htmlspecialchars($record['title']) ?>
+                    </a>
+                </li>
+        <?php }
+        } ?>
 </ul>
 </body>
