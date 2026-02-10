@@ -1,7 +1,5 @@
 # TODO
 
-1. De facut corect redirect la index php
-
 Se dorește implementarea acțiunilor specifice pentru fiecare categorie de utilizatori (va fi verificata separarea rolurilor).
 In acest moment trebuie sa aveți in vedere si aspecte cu privire la securizarea aplicației web împotriva atacurilor comune 
 la care ea va fi expusă după publicare online. Se vor considera următoarele tipuri de atacuri discutate: Form Spoofing, HTTP 
