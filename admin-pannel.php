@@ -332,6 +332,7 @@ try {
         </tbody>
         </table>
     <h2>Operatii utilizatori</h2>
+
     <h4>Stergere</h4>
         <form action="admin-pannel.php" method="post">
         <input type="hidden" name="action" value="delete_user"> <!-- fac switch in php in functie de $_POST[action]-->

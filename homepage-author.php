@@ -65,7 +65,7 @@ try {
 <nav>
 <a href="homepage.php">Home</a> |
 <a href="logout.php">Logout</a> |
-<a href="create-articles.html">Postare articol</a> |
+<a href="create-articles.php">Postare articol</a> |
 <!--modify nav bar based on which user uses it-->
 </nav>
 </header>

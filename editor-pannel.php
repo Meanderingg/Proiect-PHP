@@ -14,23 +14,27 @@ if(! isset($_SESSION['username'])){
     header('Location: ./login-user.php');
 }
 if(! isset($_SESSION['editor'])){
-        if(isset($_SESSION['editor'])){
-            header('Location: ./homepage-editor.php'); //modify for editor and author!
-        }
-        else
-            if(isset($_SESSION['author'])){
-                header('Location: ./homepage-author.php'); //modify for editor and author!
-            }
-        else
-            header('Location: ./homepage.php'); //modify for editor and author!
+        header('Location: ./homepage-editor.php'); //modify for editor and author!
+        exit;
     }
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+    try {
+        if ($_POST['action'] == "delete_article") {
+            $id_to_delete = intval($_POST['id']);
+            OperatiiDB::delete('articles', 'article_id = :id', ['id' => $id_to_delete]);
+
+            header("Location: editor-pannel.php?");
+            exit;
+        }
+    } catch (PDOException $e) {
+        die("Operation failed: " . $e->getMessage());
+    }
+}
 
 try {
     $record = OperatiiDB::read('articles', '*', 'WHERE 1 = 1'); //success, asa apelezi functia
-    
     //var_dump($record);
-
-
 } catch (PDOException $e) {
     die(" Connection failed: " . $e->getMessage());
 }
@@ -93,6 +97,14 @@ try {
         <!--merge sa fac asa un tabel cu toate info-->
         </tbody>
         </table>
+
+    <h4>Stergere</h4>
+        <form action="editor-pannel.php" method="post">
+        <input type="hidden" name="action" value="delete_article">
+        <label for="id">ID articol</label><br>
+        <input type="text" name="id" id="id">
+        <input type="submit" value="Submit">
+        </form>
 
 </body>
 </html>
