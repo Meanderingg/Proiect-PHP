@@ -1,6 +1,8 @@
 # TODO
 
 1. De facut corect redirect la index php
+2. Adaugat adaugare editor
+3. Corectat logare site
 
 Se dorește implementarea acțiunilor specifice pentru fiecare categorie de utilizatori (va fi verificata separarea rolurilor).
 In acest moment trebuie sa aveți in vedere si aspecte cu privire la securizarea aplicației web împotriva atacurilor comune 
