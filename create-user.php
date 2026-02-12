@@ -1,3 +1,43 @@
+<?php
+session_start();
+
+if (empty($_SESSION['csrf_token'])) {
+$_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+require_once './Database.php';
+
+if (isset($_POST['username']) || isset($_POST['email']) || isset($_POST['password'])) {
+
+try {
+    $pdo = Database::getInstance()->getConnection();
+    echo " Connection successful!<br>";
+} catch (PDOException $e) {
+    die(" Connection failed: " . $e->getMessage());
+}
+
+// Example insert
+try {
+    $sql = "INSERT INTO users (username, email, password) 
+            VALUES (:username, :email, :password)";
+    
+    $stmt = $pdo->prepare($sql);
+
+    // Sample data
+    $data = [
+        'username' => $_POST['username'],
+        'email'    => $_POST['email'],
+        'password' => password_hash($_POST['password'], PASSWORD_BCRYPT)
+    ];
+    $stmt->execute($data);
+    echo " User created successfully!<br>";
+} catch (PDOException $e) {
+    echo " Insert failed: " . $e->getMessage();
+}
+
+}
+?>
+
 <!DOCTYPE html>
 
 <html lang="en">
@@ -20,6 +60,8 @@
     <div class="container mt-5">
         <h1 class="mb-4">Create User</h1>
         <form action="create-user.php" method="POST">
+            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
                 <input type="text" class="form-control" id="username" name="username" required>
@@ -36,35 +78,3 @@
         </form>
     </div>
 
-    <?php
-    require_once './Database.php';
-
-    if (isset($_POST['username']) || isset($_POST['email']) || isset($_POST['password'])) {
-
-    try {
-        $pdo = Database::getInstance()->getConnection();
-        echo " Connection successful!<br>";
-    } catch (PDOException $e) {
-        die(" Connection failed: " . $e->getMessage());
-    }
-
-    // Example insert
-    try {
-        $sql = "INSERT INTO users (username, email, password) 
-                VALUES (:username, :email, :password)";
-        
-        $stmt = $pdo->prepare($sql);
-
-        // Sample data
-        $data = [
-            'username' => $_POST['username'],
-            'email'    => $_POST['email'],
-            'password' => password_hash($_POST['password'], PASSWORD_BCRYPT)
-        ];
-        $stmt->execute($data);
-        echo " User created successfully!<br>";
-    } catch (PDOException $e) {
-        echo " Insert failed: " . $e->getMessage();
-    }
-
-    }

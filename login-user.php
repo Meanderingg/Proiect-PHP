@@ -1,11 +1,23 @@
 <?php
 
 session_start();
+
+// Generate CSRF token if it doesn't exist
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 require_once './Database.php';
 
 $error = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    
+    //token
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        die("Eroare: Cerere neautorizată.");//die e alias de exit
+    }
+
     $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
     $password = $_POST['password'];
 
@@ -36,8 +48,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 header('Location: ./homepage-author.php');
                 exit;
             }
+
+            header('Location: ./homepage.php');
+            exit;
         } else {
             $error = "Email sau parolă incorectă.";
+            echo $error;
         }
     } catch (PDOException $e) {
         error_log($e->getMessage()); 
@@ -60,6 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="container mt-5">
         <h1 class="mb-4">Login User</h1>
         <form action="login-user.php" method="POST">
+
+            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
                 <input type="email" class="form-control" id="email" name="email" required>
