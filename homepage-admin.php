@@ -64,7 +64,7 @@ try {
 <header>
 <nav>
 <a href="homepage.php">Home</a> |
-<a href="login-user.php">Login</a> |
+<a href="logout.php">Logout</a> |
 <a href="admin-pannel.php">Admin Pannel</a> |
 <!--modify nav bar based on which user uses it-->
 </nav>

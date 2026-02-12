@@ -1,17 +1,49 @@
- <?php
-// Start the session
-// Source - https://stackoverflow.com/a
-// Posted by MANCHUCK, modified by community. See post 'Timeline' for change history
-// Retrieved 2026-01-03, License - CC BY-SA 4.0
+<?php
 
 session_start();
+require_once './Database.php';
 
-//$_SESSION = [];
-setcookie (session_name(), "", time() - 3600);
-session_destroy();
+$error = "";
 
-session_start();
-//de fiecare data cand dai pe login se da logout, poate faci pagina diferita de logout?
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
+    $password = $_POST['password'];
+
+    try {
+        $pdo = Database::getInstance()->getConnection();
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
+        $stmt->execute(['email' => $email]);
+        $user = $stmt->fetch();
+
+        if ($user && password_verify($password, $user['password'])) {
+            // Regerenate ID to prevent Session Fixation
+            session_regenerate_id(true);
+            
+            $_SESSION['username'] = $user['username'];
+
+            if(isset($user['administrator_id'])){
+                $_SESSION['admin'] = $user['administrator_id'];
+                header('Location: ./homepage-admin.php');
+                exit;
+                }
+            if(isset($user['editor_id'])){
+                $_SESSION['editor'] = $user['editor_id'];
+                header('Location: ./homepage-editor.php');
+                exit;
+                }
+            if(isset($user['author_id'])){
+                $_SESSION['author'] = $user['author_id'];
+                header('Location: ./homepage-author.php');
+                exit;
+            }
+        } else {
+            $error = "Email sau parolă incorectă.";
+        }
+    } catch (PDOException $e) {
+        error_log($e->getMessage()); 
+        $error = "A apărut o eroare de sistem.";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -40,67 +72,9 @@ session_start();
         </form>
     </div>
 
-    <?php
-    require_once './Database.php';
-
-    if (isset($_POST['email']) || isset($_POST['password'])) {
-
-    try {
-        $pdo = Database::getInstance()->getConnection();
-        echo " Connection successful!<br>";
-    } catch (PDOException $e) {
-        die(" Connection failed: " . $e->getMessage());
-    }
-
-    // Example select
-    try {
-        $sql = "SELECT * FROM users WHERE email = :email";
-        
-        $stmt = $pdo->prepare($sql);
-
-        // Sample data
-        $data = [
-            'email'    => $_POST['email']
-        ];
-
-        $stmt->execute($data);
-        $user = $stmt->fetch();
-
-        //var_dump($user);
-
-        if ($user && password_verify($_POST['password'], $user['password'])) {
-
-            //echo " Login successful! Welcome, " . htmlspecialchars($user['username']) . ".<br>";
-            $_SESSION['username'] = $user['username'];
-
-            if(isset($user['administrator_id'])){
-                $_SESSION['admin'] = $user['administrator_id'];
-                header('Location: ./homepage-admin.php');
-                }
-            if(isset($user['editor_id'])){
-                $_SESSION['editor'] = $user['editor_id'];
-                header('Location: ./homepage-editor.php');
-                }
-            if(isset($user['author_id'])){
-                $_SESSION['author'] = $user['author_id'];
-                header('Location: ./homepage-author.php');
-                }
-            //echo $_SESSION['username'] ;
-            header('Location: ./homepage.php');
-            exit;
-        } else 
-            if ($user)
-            {
-            echo " Invalid email or password.<br>";
-            }
-            else 
-            {
-            //echo " Invalid email or password.<br>";
-            header('Location: ./create-user.php');
-            exit;
-            }
-    } catch (PDOException $e) {
-        echo " Query failed: " . $e->getMessage();
-    }
-    }
-    ?>
+    <div class="mt-3 text-center">
+        <p>Nu ai un cont?</p>
+        <a href="create-user.php" class="btn btn-outline-secondary">Creează cont nou</a>
+    </div>
+</body>
+</html>
