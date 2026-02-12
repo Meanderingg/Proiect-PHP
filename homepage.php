@@ -71,6 +71,7 @@ try {
 <nav>
 <a href="homepage.php">Home</a> |
 <a href="logout.php">Logout</a> |
+<a href="feedback.php">Feedback</a> |
 <!--modify nav bar based on which user uses it-->
 </nav>
 </header>
