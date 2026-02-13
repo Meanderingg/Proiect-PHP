@@ -87,5 +87,11 @@ try {
                 </li>
         <?php }
         } ?>
-</ul>
+        
+    </ul>
+
+    <h1>Articole Euronews</h1>
+    <?php 
+        include './parsare.php';
+    ?>
 </body>
