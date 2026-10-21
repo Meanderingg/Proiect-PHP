@@ -172,31 +172,5 @@ The project documentation and TODO notes mention several security concerns that 
 
 This project is not yet presented as fully production-ready security-wise, and it should be treated as an academic or learning project unless additional hardening is performed.
 
-## Known Issues / TODO
-
-The repository includes a `TODO.md` with several pending tasks:
-
-- Fix redirect to the correct index page
-- Add support for adding editors
-- Correct the site login flow
-- Improve role separation and access control
-- Harden the application against common web attacks
-- Add anti-bot protection to public forms
-
 ## License
-
-No explicit license is currently specified in the repository.
-
-This means the project should be considered as:
-- educational or academic project code,
-- personal project code,
-- not to be used commercially without confirming permission from the repository owner.
-
-## Conclusion
-
-This repository is a PHP web application for managing an online magazine with role-based permissions and article publishing workflows. It is a practical project that demonstrates PHP, database interaction, HTML/CSS front-end work, and basic web application security considerations.
-
-If you want, I can also generate:
-- a cleaner GitHub-ready README,
-- a shorter version for quick project presentation,
-- or a Romanian-language README.
+This is an academic project, please contact me if you want to use the code.
